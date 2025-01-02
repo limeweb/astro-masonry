@@ -1,6 +1,6 @@
 {
   "name": "astro-masonry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A zero-dependency masonry layout component for Astro",
   "type": "module",
   "exports": {
@@ -29,9 +29,6 @@
   "homepage": "https://astro-masonry.vercel.app/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "peerDependencies": {
-    "astro": "^4.0.0"
   },
   "devDependencies": {}
 }
