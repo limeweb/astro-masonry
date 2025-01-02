@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Masonry } from "../../../src/index";
+---
+
+<Layout>
+  <h1 class="text-4xl text-center py-8">Astro Masonry Component</h1>
+  <Masonry
+    breakpointCols={{
+      default: 4,
+      1200: 3,
+      700: 2,
+      500: 1,
+    }}
+  >
+    {
+      [...Array(10)].map((_, i) => (
+        <div class="bg-red-400 mb-4">
+          <img src={"https://picsum.photos/1200/300"} />
+        </div>
+      ))
+    }
+  </Masonry>
+</Layout>

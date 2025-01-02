@@ -1,2 +1,2 @@
 # astro-masonry
- Astro Masonry layout component powered by CSS
+ A zero-dependency masonry layout component for Astro

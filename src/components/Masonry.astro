@@ -1,0 +1,194 @@
+---
+interface Props {
+  breakpointCols?: number | Record<number | "default", number>;
+  className?: string;
+  columnClassName?: string;
+}
+
+const {
+  breakpointCols = 2,
+  className = "astro-masonry-grid",
+  columnClassName = "astro-masonry-grid_column",
+} = Astro.props;
+
+const breakpointColsString =
+  typeof breakpointCols === "object"
+    ? JSON.stringify(breakpointCols)
+    : breakpointCols.toString();
+---
+
+<style is:global>
+  [data-masonry-container] > * {
+    visibility: hidden;
+  }
+
+  [data-masonry-container].initialized > * {
+    visibility: visible;
+  }
+
+  .astro-masonry-grid {
+    display: flex;
+    width: auto;
+    margin-left: -1rem;
+  }
+
+  .astro-masonry-grid_column {
+    padding-left: 1rem;
+    background-clip: padding-box;
+    transition: width 0.2s ease;
+  }
+
+  .astro-masonry-grid_column > div {
+    margin-bottom: 1rem;
+  }
+</style>
+
+<div
+  class={className}
+  data-breakpoint-cols={breakpointColsString}
+  data-masonry-container
+  data-column-class={columnClassName}
+>
+  <slot />
+</div>
+
+<script is:inline>
+  class MasonryLayout {
+    constructor(container) {
+      this.container = container;
+      this.originalItems = Array.from(container.children);
+      this.defaultCols = 2;
+
+      // Parse the `breakpointCols` from the dataset
+      const breakpointColsAttr = container.dataset.breakpointCols;
+      try {
+        const parsed = JSON.parse(breakpointColsAttr);
+        this.breakpointCols =
+          typeof parsed === "object"
+            ? parsed
+            : { default: parseInt(parsed, 10) };
+      } catch (error) {
+        console.error("Invalid `breakpointCols` format:", breakpointColsAttr);
+        this.breakpointCols = { default: this.defaultCols }; // Fallback
+      }
+
+      console.log("Parsed breakpointCols:", this.breakpointCols);
+
+      this.columnCount = this.calculateColumnCount();
+
+      this.resizeHandler = this.throttle(this.handleResize.bind(this), 200);
+      window.addEventListener("resize", this.resizeHandler);
+
+      requestAnimationFrame(() => this.createLayout());
+    }
+
+    createLayout() {
+      this.container.classList.remove("initialized");
+
+      const existingColumns = Array.from(
+        this.container.querySelectorAll(
+          `.${this.container.dataset.columnClass}`
+        )
+      );
+
+      // If column count hasn't changed, reuse existing columns
+      if (existingColumns.length === this.columnCount) {
+        // Clear existing columns and redistribute items
+        existingColumns.forEach((column) => (column.innerHTML = ""));
+        this.originalItems.forEach((item, index) => {
+          const columnIndex = index % this.columnCount;
+          existingColumns[columnIndex].appendChild(item);
+        });
+      } else {
+        // Clear the container and create new columns if the count has changed
+        this.container.innerHTML = "";
+        const columns = Array.from({ length: this.columnCount }, () => {
+          const column = document.createElement("div");
+          column.className = this.container.dataset.columnClass;
+          column.style.width = `${100 / this.columnCount}%`;
+          return column;
+        });
+
+        this.originalItems.forEach((item, index) => {
+          const columnIndex = index % this.columnCount;
+          columns[columnIndex].appendChild(item);
+        });
+
+        columns.forEach((column) => this.container.appendChild(column));
+      }
+
+      this.container.classList.add("initialized");
+
+      console.log("Layout created with", this.columnCount, "columns.");
+    }
+
+    calculateColumnCount() {
+      const windowWidth = window.innerWidth;
+
+      if (typeof this.breakpointCols === "object") {
+        const breakpoints = Object.keys(this.breakpointCols)
+          .filter((key) => key !== "default")
+          .map(Number)
+          .sort((a, b) => a - b); // Sort breakpoints in ascending order
+
+        let matchedBreakpoint = this.breakpointCols.default; // Start with default
+        for (const breakpoint of breakpoints) {
+          if (windowWidth <= breakpoint) {
+            matchedBreakpoint = this.breakpointCols[breakpoint];
+            console.log(
+              `Matched breakpoint: ${breakpoint}px -> ${matchedBreakpoint} columns`
+            );
+            break; // Stop once the smallest matching breakpoint is found
+          }
+        }
+        return matchedBreakpoint;
+      }
+
+      return this.breakpointCols.default || this.defaultCols;
+    }
+
+    handleResize() {
+      const newColumnCount = this.calculateColumnCount();
+
+      if (newColumnCount !== this.columnCount) {
+        console.log(
+          "Resizing: Changing column count from",
+          this.columnCount,
+          "to",
+          newColumnCount
+        );
+        this.columnCount = newColumnCount;
+        this.createLayout();
+      }
+    }
+
+    throttle(func, limit) {
+      let lastFunc;
+      let lastRan;
+      return (...args) => {
+        const now = Date.now();
+        if (!lastRan) {
+          func.apply(this, args);
+          lastRan = now;
+        } else {
+          clearTimeout(lastFunc);
+          lastFunc = setTimeout(
+            () => {
+              if (now - lastRan >= limit) {
+                func.apply(this, args);
+                lastRan = now;
+              }
+            },
+            limit - (now - lastRan)
+          );
+        }
+      };
+    }
+  }
+
+  document.querySelectorAll("[data-masonry-container]").forEach((container) => {
+    if (container instanceof HTMLElement) {
+      new MasonryLayout(container);
+    }
+  });
+</script>

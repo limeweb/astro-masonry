@@ -1,0 +1,37 @@
+{
+  "name": "astro-masonry",
+  "version": "1.0.0",
+  "description": "A zero-dependency masonry layout component for Astro",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "astro-component",
+    "astro",
+    "masonry",
+    "layout",
+    "grid",
+    "responsive"
+  ],
+  "author": "Olivier Estévez",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "astro": "^4.0.0"
+  },
+  "devDependencies": {}
+}
