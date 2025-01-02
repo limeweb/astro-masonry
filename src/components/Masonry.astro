@@ -86,9 +86,7 @@ const breakpointColsString =
       this.container.classList.remove("initialized");
 
       const existingColumns = Array.from(
-        this.container.querySelectorAll(
-          `.${this.container.dataset.columnClass}`
-        )
+        this.container.querySelectorAll("[data-masonry-column]")
       );
 
       // If column count hasn't changed, reuse existing columns
@@ -106,6 +104,7 @@ const breakpointColsString =
           const column = document.createElement("div");
           column.className = this.container.dataset.columnClass;
           column.style.width = `${100 / this.columnCount}%`;
+          column.setAttribute("data-masonry-column", "");
           return column;
         });
 
