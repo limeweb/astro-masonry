@@ -11,6 +11,8 @@
 - **Minimal client JS**: Small runtime footprint
 - **Performance-first**: Optimized for speed and efficiency
 
+[Demo](https://astro-masonry.vercel.app/)
+
 ## Motivation
 Most masonry layout libraries are either JavaScript-heavy or framework-dependent, making them suboptimal for Astro. This Astro-native component stays within the Astro ecosystem (avoiding unnecessary frameworks) and works seamlessly with Astro's `<Image/>` component, providing built-in image optimization and preventing Cumulative Layout Shift (CLS).
 
