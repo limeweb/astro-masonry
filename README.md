@@ -50,6 +50,7 @@ import { Masonry } from 'astro-masonry';
 | `breakpointCols` | `number \| Record<number \| "default", number>` | `2`                           | Number of columns at different breakpoints |
 | `class`          | `string`                                        | `"astro-masonry-grid"`        | CSS class for the container                |
 | `columnClass`    | `string`                                        | `"astro-masonry-grid_column"` | CSS class for columns                      |
+| `sortByHeight`   | `boolean`                                       | `false`                       | Sort items by height for balanced layout   |
 
 ## Breakpoints
 
@@ -86,6 +87,20 @@ Alternatively, you can apply custom classes directly on the component. This is v
   breakpointCols={3}
   class="flex gap-4 px-4"
   columnClass=""
+>
+</Masonry>
+```
+
+## Height-based Sorting
+
+Enable `sortByHeight` to create a more balanced layout by placing items in the column with the least height
+
+> ⚠️ **Note**: This option breaks the original items order to achieve a more balanced layout height distribution.
+
+```astro
+<Masonry
+  ...
+  sortByHeight={true}
 >
 </Masonry>
 ```
