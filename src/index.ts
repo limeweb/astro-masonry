@@ -24,4 +24,11 @@ export interface MasonryProps {
    * @default "astro-masonry-grid_column"
    */
   columnClassName?: string;
+
+  /**
+   * Enable height-based item sorting for balanced columns
+   * @warning This breaks the original items order
+   * @default false
+   */
+  sortByHeight?: boolean;
 }
