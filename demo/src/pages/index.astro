@@ -20,13 +20,16 @@ import { Image } from "astro:assets";
   >
     {
       [...Array(40)].map((_, i) => (
-        <div class="mb-4 overflow-hidden rounded-xl outline outline-white/20 outline-1 -outline-offset-1">
+        <div class="mb-4 overflow-hidden rounded-xl outline outline-white/20 outline-1 -outline-offset-1 relative">
           <Image
             src={`https://picsum.photos/1200/${Math.floor(Math.random() * (1200 - 600 + 1) + 600)}`}
             alt=""
             inferSize
             class="w-full"
           />
+          <div class="bg-neutral-800/50 absolute top-1 left-1 rounded-xl text-sm w-8 h-8 flex items-center justify-center text-neutral-200 outline -outline-offset-1 outline-1 outline-white/20 pointer-events-none">
+            {i + 1}
+          </div>
         </div>
       ))
     }
@@ -39,8 +42,10 @@ import { Image } from "astro:assets";
       target="_blank"
       class="hover:text-neutral-400 transition-colors">Olivier Estévez</a
     >
-    <a href="https://github.com/OlivierEstevez/astro-masonry" target="_blank" class="hover:text-neutral-400 transition-colors"
-      >View on Github</a
+    <a
+      href="https://github.com/OlivierEstevez/astro-masonry"
+      target="_blank"
+      class="hover:text-neutral-400 transition-colors">View on Github</a
     >
   </footer>
 </Layout>

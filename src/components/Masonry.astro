@@ -3,12 +3,14 @@ interface Props {
   breakpointCols?: number | Record<number | "default", number>;
   class?: string;
   columnClass?: string;
+  sortByHeight?: boolean;
 }
 
 const {
   breakpointCols = 2,
   class: className = "astro-masonry-grid",
   columnClass = "astro-masonry-grid_column",
+  sortByHeight = false,
 } = Astro.props;
 
 const breakpointColsString =
@@ -18,6 +20,11 @@ const breakpointColsString =
 ---
 
 <style is:global>
+  [data-masonry-container] {
+    display: flex;
+    align-items: flex-start;
+  }
+
   [data-masonry-container] > * {
     visibility: hidden;
   }
@@ -37,6 +44,7 @@ const breakpointColsString =
   data-breakpoint-cols={breakpointColsString}
   data-masonry-container
   data-column-class={columnClass}
+  data-sort-by-height={sortByHeight.toString()}
 >
   <slot />
 </div>
@@ -47,6 +55,7 @@ const breakpointColsString =
       this.container = container;
       this.originalItems = Array.from(container.children);
       this.defaultCols = 2;
+      this.sortByHeight = container.dataset.sortByHeight === "true";
 
       // Parse the `breakpointCols` from the dataset
       const breakpointColsAttr = container.dataset.breakpointCols;
@@ -73,41 +82,48 @@ const breakpointColsString =
 
     createLayout() {
       this.container.classList.remove("initialized");
-
       const existingColumns = Array.from(
         this.container.querySelectorAll("[data-masonry-column]")
       );
 
+      let columns;
+
       // If column count hasn't changed, reuse existing columns
       if (existingColumns.length === this.columnCount) {
-        // Clear existing columns and redistribute items
-        existingColumns.forEach((column) => (column.innerHTML = ""));
-        this.originalItems.forEach((item, index) => {
-          const columnIndex = index % this.columnCount;
-          existingColumns[columnIndex].appendChild(item);
-        });
+        columns = existingColumns;
+        // Just clear existing columns
+        columns.forEach((column) => (column.innerHTML = ""));
       } else {
-        // Clear the container and create new columns if the count has changed
+        // Create new columns if count changed
         this.container.innerHTML = "";
-        const columns = Array.from({ length: this.columnCount }, () => {
+        columns = Array.from({ length: this.columnCount }, () => {
           const column = document.createElement("div");
           column.className = this.container.dataset.columnClass;
           column.style.width = `${100 / this.columnCount}%`;
           column.setAttribute("data-masonry-column", "");
+          this.container.appendChild(column);
           return column;
         });
+      }
 
+      // Distribute items based on sortByHeight
+      if (this.sortByHeight) {
+        this.originalItems.forEach((item) => {
+          const columnWithLeastHeight = columns.reduce((shortest, current) => {
+            return current.offsetHeight < shortest.offsetHeight
+              ? current
+              : shortest;
+          }, columns[0]);
+          columnWithLeastHeight.appendChild(item);
+        });
+      } else {
         this.originalItems.forEach((item, index) => {
           const columnIndex = index % this.columnCount;
           columns[columnIndex].appendChild(item);
         });
-
-        columns.forEach((column) => this.container.appendChild(column));
       }
 
       this.container.classList.add("initialized");
-
-      console.log("Layout created with", this.columnCount, "columns.");
     }
 
     calculateColumnCount() {
