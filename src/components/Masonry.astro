@@ -49,8 +49,16 @@ const breakpointColsString =
   <slot />
 </div>
 
-<script is:inline>
+<script>
   class MasonryLayout {
+    container;
+    originalItems;
+    defaultCols = 2;
+    sortByHeight;
+    breakpointCols;
+    columnCount;
+    resizeHandler;
+
     constructor(container) {
       this.container = container;
       this.originalItems = Array.from(container.children);
@@ -190,9 +198,19 @@ const breakpointColsString =
     }
   }
 
-  document.querySelectorAll("[data-masonry-container]").forEach((container) => {
-    if (container instanceof HTMLElement) {
-      new MasonryLayout(container);
-    }
+  function initializeMasonry() {
+    document
+      .querySelectorAll("[data-masonry-container]")
+      .forEach((container) => {
+        if (container instanceof HTMLElement) {
+          new MasonryLayout(container);
+        }
+      });
+  }
+
+  initializeMasonry();
+
+  document.addEventListener("astro:after-swap", () => {
+    initializeMasonry();
   });
 </script>

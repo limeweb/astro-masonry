@@ -6,6 +6,7 @@
 
 - **Zero setup required**: Works out of the box
 - **Fully responsive**: Configure columns for any breakpoint
+- **View Transitions**: Support for Astro’s built-in transitions
 - **Highly customizable**: Apply custom classes to container and columns
 - **Zero dependencies**: Pure vanilla JavaScript
 - **Minimal client JS**: Small runtime footprint
