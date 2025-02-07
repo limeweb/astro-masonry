@@ -146,11 +146,11 @@ class MasonryLayout {
   }
 }
 
-function initializeMasonry() {
+export function initializeMasonry() {
   document
     .querySelectorAll("[data-masonry-container]")
     .forEach((container) => {
-      if (container instanceof HTMLElement) {
+      if (container instanceof HTMLElement && container.children.length > 0) {
         new MasonryLayout(container);
       }
     });
@@ -159,5 +159,7 @@ function initializeMasonry() {
 initializeMasonry();
 
 document.addEventListener("astro:after-swap", () => {
-  initializeMasonry();
+  setTimeout(() => {
+    initializeMasonry();
+  }, 0); // Delay execution to ensure DOM is ready
 });
