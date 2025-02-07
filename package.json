@@ -1,6 +1,6 @@
 {
   "name": "astro-masonry",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A zero-dependency responsive masonry layout component for Astro with minimal setup",
   "type": "module",
   "exports": {
