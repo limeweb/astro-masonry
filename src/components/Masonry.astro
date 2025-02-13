@@ -4,6 +4,7 @@ interface Props {
   class?: string;
   columnClass?: string;
   sortByHeight?: boolean;
+  debug?: boolean;
 }
 
 const {
@@ -11,6 +12,7 @@ const {
   class: className = "astro-masonry-grid",
   columnClass = "astro-masonry-grid_column",
   sortByHeight = false,
+  debug = false,
 } = Astro.props;
 
 const breakpointColsString =
@@ -45,6 +47,7 @@ const breakpointColsString =
   data-masonry-container
   data-column-class={columnClass}
   data-sort-by-height={sortByHeight.toString()}
+  data-debug={debug.toString()}
 >
   <slot />
 </div>

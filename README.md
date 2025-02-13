@@ -46,12 +46,13 @@ import { Masonry } from 'astro-masonry';
 
 ## Props
 
-| Prop             | Type                                            | Default                       | Description                                |
-|------------------|-------------------------------------------------|-------------------------------|--------------------------------------------|
-| `breakpointCols` | `number \| Record<number \| "default", number>` | `2`                           | Number of columns at different breakpoints |
-| `class`          | `string`                                        | `"astro-masonry-grid"`        | CSS class for the container                |
-| `columnClass`    | `string`                                        | `"astro-masonry-grid_column"` | CSS class for columns                      |
-| `sortByHeight`   | `boolean`                                       | `false`                       | Sort items by height for balanced layout   |
+| Prop             | Type                                            | Default                       | Description                                            |
+|------------------|-------------------------------------------------|-------------------------------|--------------------------------------------------------|
+| `breakpointCols` | `number \| Record<number \| "default", number>` | `2`                           | Number of columns at different breakpoints             |
+| `class`          | `string`                                        | `"astro-masonry-grid"`        | CSS class for the container                            |
+| `columnClass`    | `string`                                        | `"astro-masonry-grid_column"` | CSS class for columns                                  |
+| `sortByHeight`   | `boolean`                                       | `false`                       | Sort items by height for balanced layout               |
+| `debug`          | `boolean`                                       | `false`                       | Enable console logging of the masonry component events |
 
 ## Breakpoints
 

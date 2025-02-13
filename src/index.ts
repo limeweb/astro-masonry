@@ -31,4 +31,10 @@ export interface MasonryProps {
    * @default false
    */
   sortByHeight?: boolean;
+
+  /**
+   * Enable console logging of the masonry component events
+   * @default false
+   */
+  debug?: boolean;
 }

@@ -6,12 +6,14 @@ class MasonryLayout {
   breakpointCols;
   columnCount;
   resizeHandler;
+  debug;
 
   constructor(container) {
     this.container = container;
     this.originalItems = Array.from(container.children);
     this.defaultCols = 2;
     this.sortByHeight = container.dataset.sortByHeight === "true";
+    this.debug = container.dataset.debug === "true";
 
     // Parse the `breakpointCols` from the dataset
     const breakpointColsAttr = container.dataset.breakpointCols;
@@ -26,8 +28,10 @@ class MasonryLayout {
       this.breakpointCols = { default: this.defaultCols }; // Fallback
     }
 
-    console.log("Parsed breakpointCols:", this.breakpointCols);
-
+    if (this.debug) {
+      console.log("Parsed breakpointCols:", this.breakpointCols);
+    }
+      
     this.columnCount = this.calculateColumnCount();
 
     this.resizeHandler = throttle(this.handleResize.bind(this), 200);
@@ -95,9 +99,11 @@ class MasonryLayout {
       for (const breakpoint of breakpoints) {
         if (windowWidth <= breakpoint) {
           matchedBreakpoint = this.breakpointCols[breakpoint];
-          console.log(
-            `Matched breakpoint: ${breakpoint}px -> ${matchedBreakpoint} columns`
-          );
+          if (this.debug) {
+            console.log(
+              `Matched breakpoint: ${breakpoint}px -> ${matchedBreakpoint} columns`
+            );
+          }
           break; // Stop once the smallest matching breakpoint is found
         }
       }
@@ -111,12 +117,14 @@ class MasonryLayout {
     const newColumnCount = this.calculateColumnCount();
 
     if (newColumnCount !== this.columnCount) {
-      console.log(
-        "Resizing: Changing column count from",
-        this.columnCount,
-        "to",
-        newColumnCount
-      );
+      if (this.debug) {
+        console.log(
+          "Resizing: Changing column count from",
+          this.columnCount,
+          "to",
+          newColumnCount
+        );
+      }
       this.columnCount = newColumnCount;
       this.createLayout();
     }
