@@ -30,7 +30,7 @@ class MasonryLayout {
 
     this.columnCount = this.calculateColumnCount();
 
-    this.resizeHandler = this.throttle(this.handleResize.bind(this), 200);
+    this.resizeHandler = throttle(this.handleResize.bind(this), 200);
     window.addEventListener("resize", this.resizeHandler);
 
     requestAnimationFrame(() => this.createLayout());
@@ -121,29 +121,6 @@ class MasonryLayout {
       this.createLayout();
     }
   }
-
-  throttle(func, limit) {
-    let lastFunc;
-    let lastRan;
-    return (...args) => {
-      const now = Date.now();
-      if (!lastRan) {
-        func.apply(this, args);
-        lastRan = now;
-      } else {
-        clearTimeout(lastFunc);
-        lastFunc = setTimeout(
-          () => {
-            if (now - lastRan >= limit) {
-              func.apply(this, args);
-              lastRan = now;
-            }
-          },
-          limit - (now - lastRan)
-        );
-      }
-    };
-  }
 }
 
 export function initializeMasonry() {
@@ -156,10 +133,25 @@ export function initializeMasonry() {
     });
 }
 
-initializeMasonry();
-
-document.addEventListener("astro:after-swap", () => {
-  setTimeout(() => {
-    initializeMasonry();
-  }, 0); // Delay execution to ensure DOM is ready
-});
+export function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return (...args) => {
+    const now = Date.now();
+    if (!lastRan) {
+      func.apply(this, args);
+      lastRan = now;
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(
+        () => {
+          if (now - lastRan >= limit) {
+            func.apply(this, args);
+            lastRan = now;
+          }
+        },
+        limit - (now - lastRan)
+      );
+    }
+  };
+}

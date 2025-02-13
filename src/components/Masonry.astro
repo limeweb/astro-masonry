@@ -49,4 +49,23 @@ const breakpointColsString =
   <slot />
 </div>
 
-<script src="./masonry.js"></script>
+<script>
+  import { initializeMasonry, throttle } from "./masonry.js";
+
+  let initialized = false;
+
+  document.addEventListener("astro:page-load", () => {
+    const masonryContainer = document.querySelector("[data-masonry-container]");
+    if (!masonryContainer) {
+      return; // Exit if the container isn't there
+    }
+
+    if (!initialized) {
+      initializeMasonry();
+      initialized = true;
+    } else {
+      const throttledInitialize = throttle(initializeMasonry, 200);
+      throttledInitialize();
+    }
+  });
+</script>
