@@ -11,6 +11,7 @@
 - **Zero dependencies**: Pure vanilla JavaScript
 - **Minimal client JS**: Small runtime footprint
 - **Performance-first**: Optimized for speed and efficiency
+- **Lazy Loading**: Supports Astro's lazy-loading features
 
 [Demo](https://astro-masonry.vercel.app/)
 
@@ -106,6 +107,19 @@ Enable `sortByHeight` to create a more balanced layout by placing items in the c
 >
 </Masonry>
 ```
+
+## Lazy Loading
+
+Depending on how you're loading your images you'll need to configure a few things to ensure seamless lazy loading with this component.
+
+### Local images
+For local images, set the `width` property and `loading="lazy"` on the `<Image />` component. Astro will handle the rest.
+
+
+### Remote images
+
+1. Ensure your authorizing remote images from the images domain. See [Astro - Authorizing remote images](https://docs.astro.build/en/guides/images/#authorizing-remote-images) for more information.
+2. Apply `inferSize` and `loading="lazy"` to the <Image/> component. `inferSize` is crucial for preventing layout shift with remote images.
 
 ## Example
 

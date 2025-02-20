@@ -33,6 +33,7 @@ const images = await response.json();
               src={`https://picsum.photos/id/${image.id}/1200/${((image.id % 4) + 2) * 300}`}
               alt=""
               inferSize
+              loading="lazy"
               class="w-full"
             />
             <div class="bg-neutral-800/50 absolute top-1 left-1 rounded-xl text-sm w-8 h-8 flex items-center justify-center text-neutral-200 outline -outline-offset-1 outline-1 outline-white/20 pointer-events-none">
