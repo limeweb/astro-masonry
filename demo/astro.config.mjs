@@ -9,5 +9,9 @@ export default defineConfig({
     enabled: false
   },
 
-  integrations: [tailwind()]
+  integrations: [tailwind()],
+
+  image: {
+    domains: ["picsum.photos"],
+  }
 });
