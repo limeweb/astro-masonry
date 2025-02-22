@@ -65,10 +65,13 @@ const breakpointColsString =
 
   let initialized = false;
 
-  document.addEventListener("astro:page-load", () => {
+  const initMasonry = () => {
+    console.log("Initializing masonry.");
+
     const masonryContainer = document.querySelector("[data-masonry-container]");
     if (!masonryContainer) {
-      return; // Exit if the container isn't there
+      console.warn("Masonry container not found.");
+      return;
     }
 
     if (!initialized) {
@@ -78,5 +81,23 @@ const breakpointColsString =
       const throttledInitialize = throttle(initializeMasonry, 200);
       throttledInitialize();
     }
-  });
+  };
+
+  const hasAstroViewTransitions = () => {
+    if (typeof document === "undefined") return false; // Server side render check.
+    const metaTag = document.querySelector(
+      'meta[name="astro-view-transitions-enabled"]'
+    );
+    return metaTag && metaTag.getAttribute("content") === "true";
+  };
+
+  if (hasAstroViewTransitions()) {
+    document.addEventListener("astro:page-load", initMasonry);
+  } else {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initMasonry);
+    } else {
+      initMasonry();
+    }
+  }
 </script>
